@@ -1,0 +1,73 @@
+# Screenshoter - Regras para Cursor AI
+
+## Contexto do Projeto
+Aplicação Electron minimalista para captura de screenshots com TypeScript, Vite, SQLite nativo e Biome.
+
+## Padrões de Código OBRIGATÓRIOS
+
+### Nomenclatura
+- Classes: PascalCase com sufixos específicos (`Manager`, `Window`, `Event`, `Op`, `State`)
+- Métodos/Variáveis: camelCase
+- Arquivos: kebab-case
+- Constantes em objetos: propriedades em UPPER_SNAKE_CASE
+
+### Estrutura de Classes
+- Managers: Singleton com `getInstance()` estático
+- Windows: Classe estática com `_instance` privada, métodos `create()`, `toggle()`, `hide()`
+- Events: Classe estática com método `register()` que registra handlers IPC
+- States: Classe estática com getter/setter para propriedade privada
+- Operations: Classe estática com método `execute()` que recebe database e params
+
+### IPC Patterns
+- Canais: `electron:screenshoter:*` ou `electron:library:*`
+- Main: `ipcMain.handle()` para async com retorno, `ipcMain.on()` para eventos
+- Renderer: `ipcRenderer.invoke()` para chamadas com resposta, `ipcRenderer.send()` para eventos
+- Preload: Expor via `contextBridge.exposeInMainWorld("api", api)`
+
+### Formatação (Biome)
+- Indentação: Tabs (não espaços)
+- Aspas: Duplas (`"`)
+- Semicolons: Apenas quando necessário (`asNeeded`)
+- Organização de imports: Automática
+
+### Imports
+Ordem: 1) Bibliotecas externas, 2) @electron-toolkit/*, 3) node:*, 4) Electron, 5) Relativos
+
+### Database
+- Usar `sql-bricks` para queries
+- Operações em classes com `execute()` estático
+- Usar `DatabaseSync` do `node:sqlite`
+
+### TypeScript
+- Usar `tsconfig.node.json` para main/preload
+- Usar `tsconfig.web.json` para renderer
+- Interfaces para contratos, types para parâmetros complexos
+
+### Platform-Specific
+- Usar `platform.isMacOS`, `platform.isWindows`, `platform.isLinux` do `@electron-toolkit/utils`
+
+### Tratamento de Erros
+- Notificações via `NotificationDispatcher.dispatch()` ou `DispatcherSuccessNotification.dispatch()`
+- Logs com `console.error()` para erros, `console.log()` para info
+
+## Ao Criar/Modificar Código
+1. Seguir padrões de nomenclatura acima
+2. Usar classes estáticas quando apropriado
+3. Manter consistência com estrutura existente
+4. Formatar com Biome (tabs, aspas duplas, semicolons asNeeded)
+5. Organizar imports corretamente
+6. Adicionar tratamento de erros e notificações quando necessário
+7. Verificar se janelas não foram destruídas antes de usar
+8. Usar tipos TypeScript apropriados
+
+## Estrutura de Pastas
+- `src/main/`: Processo principal (database, events, ui, utils, etc.)
+- `src/preload/`: Context bridge scripts
+- `src/renderer/`: Frontend (HTML, CSS, TS)
+- Cada UI tem seu próprio HTML, TS e CSS separado
+
+## Build
+- Externalizar dependências nativas (`better-sqlite3`)
+- Usar `externalizeDepsPlugin()` para main e preload
+- Scripts: `dev` (desenvolvimento), `build` (produção), `build:mac/win/linux` (específicos)
+

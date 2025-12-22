@@ -1,0 +1,15 @@
+export class LibraryIPC {
+  static GET_ALL = 'electron:library:get-all'
+  static GET_NEW = 'electron:library:get-new'
+  static GET_BY_ID = 'electron:library:get-by-id'
+  static GET_PREVIEW_IMAGE_ID = 'electron:library:get-preview-image-id'
+  static GET_DETAIL_IMAGE_ID = 'electron:library:get-detail-image-id'
+  static OPEN_DETAIL = 'electron:library:open-detail'
+  static DELETE = 'electron:library:delete'
+  static UPDATE_TITLE = 'electron:library:update-title'
+  static SAVE = 'electron:library:save'
+  static COPY = 'electron:library:copy'
+  static SAVE_AS = 'electron:library:save-as'
+  static COPY_DRAWING = 'electron:library:copy-drawing'
+  static SHOW_IN_FOLDER = 'electron:library:show-in-folder'
+}
