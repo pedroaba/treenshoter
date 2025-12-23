@@ -1,0 +1,96 @@
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: apt-update
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update
+
+      - name: autoremove
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt autoremove
+
+      - name: Install libarchive rpm on Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install libarchive-tools rpm
+
+      - name: Release Electron app
+        if: matrix.os == 'macos-latest'
+        run: bash .github/scripts/build/build-macos-app.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+
+      - name: Release Electron app
+        if: matrix.os == 'ubuntu-latest'
+        run: bash .github/scripts/build/build-linux-app.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+
+      - name: Release Electron app
+        if: matrix.os == 'windows-latest'
+        run: pwsh .github/scripts/build/build-windows-app.ps1
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+
+  update-release-links:
+    needs: release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Update release links
+        run: pnpm tsx .github/scripts/links.ts
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
