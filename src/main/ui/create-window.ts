@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { BrowserWindow } from 'electron'
 
-import { registerRoute } from '../../../electron-router-dom'
+import { registerRoute } from '../../../routers'
 
 type Route = Parameters<typeof registerRoute>[0]
 

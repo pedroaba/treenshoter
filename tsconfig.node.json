@@ -5,7 +5,7 @@
     "src/main/**/*",
     "src/preload/**/*",
     "src/shared/**/*"
-, "electron-router-dom.ts"  ],
+, "routers.ts"  ],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"]

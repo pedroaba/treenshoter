@@ -1,6 +1,6 @@
 import { Route } from 'react-router-dom'
 
-import { Router } from '../../../electron-router-dom'
+import { Router } from '../../../routers'
 import { LibraryScreen } from './screens/library'
 import { SettingsScreen } from './screens/settings'
 import { OverlayScreen } from './screens/overlay'

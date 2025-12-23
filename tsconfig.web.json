@@ -5,7 +5,8 @@
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts",
-    "src/shared/**/*", "electron-router-dom.ts"
+    "src/shared/**/*",
+    "routers.ts"
   ],
   "compilerOptions": {
     "composite": true,

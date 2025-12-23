@@ -16,6 +16,7 @@ export class SelectModeEvent {
   }
 
   private static sendModeToOverlays(mode: string): void {
+    // @ts-ignore
     const overlayMode = SelectModeEvent.mapModeToOverlay(mode)
     // const overlays = OverlaysManager.gets()
     // console.log("[main] overlays encontrados:", overlays.length)

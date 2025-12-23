@@ -1,5 +1,5 @@
 appId: com.pedroaba.screenshoter
-productName: treenshoter
+productName: Treenshoter
 directories:
   buildResources: build
 files:
@@ -12,14 +12,16 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: treenshoter
+  executableName: Treenshoter
+  icon: resources/icon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
+  createDesktopShortcut: false
 mac:
   entitlementsInherit: build/entitlements.mac.plist
+  icon: resources/icon.icns
   extendInfo:
     - NSCameraUsageDescription: Application requests access to the device's camera.
     - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
@@ -28,7 +30,9 @@ mac:
   notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}
+  icon: resources/icon.icns
 linux:
+  icon: resources/icon.png
   target:
     - AppImage
     - deb
