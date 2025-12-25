@@ -18,6 +18,7 @@ type NotifyParams = {
 
 export type TreenshoterAPI = {
   global: {
+    escape: () => void
     notify: (params: NotifyParams) => Promise<void>
     setTitle: (title: string) => void
     readyToTakePrint: (mode: PrintScreenMode) => void
@@ -77,6 +78,9 @@ declare global {
 
 const api = {
   global: {
+    escape: () => {
+      return ipcRenderer.send(GlobalsIPC.ESCAPE)
+    },
     notify: async (params: NotifyParams) => {
       return await ipcRenderer.invoke(GlobalsIPC.NOTIFY, params)
     },

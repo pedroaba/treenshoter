@@ -5,4 +5,6 @@ export class GlobalsIPC {
 
   static READY_TO_TAKE_PRINT = 'electron:globals:ready-to-take-print'
   static MODE_CHANGED = 'electron:globals:mode-changed'
+
+  static ESCAPE = 'electron:globals:escape'
 }

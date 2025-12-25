@@ -4,11 +4,7 @@ import { app, BrowserWindow, globalShortcut, net, protocol } from 'electron'
 import { settings } from './constants/settings'
 import { BootstrapDatabase } from './database/init'
 import { EscapeEvent } from './events/escape'
-import { FinishSelectionEvent } from './events/finish-selection'
 import { LibraryEvents } from './events/library'
-import { OpenLibraryEvent } from './events/open-library'
-import { PrintFullscreenEvent } from './events/print-full-screen'
-import { SelectModeEvent } from './events/select-mode'
 import { SettingsEvents } from './events/settings'
 import { PrintShortcut } from './shortcuts/print'
 import { QuitState } from './states/quit'
@@ -17,6 +13,8 @@ import { TrayWindow } from './ui/tray'
 import { DockEvent } from './events/dock'
 import { PrintEvent } from './events/print'
 import { NotificationEvent } from './events/notification'
+import { SetTitleEvents } from './events/set-title'
+import { GlobalEvent } from './events/global'
 
 app.setAboutPanelOptions({
   applicationName: settings.ELECTRON_APP_NAME,
@@ -54,16 +52,14 @@ app.whenReady().then(() => {
 
   PrintShortcut.register()
 
-  PrintFullscreenEvent.register()
-  SelectModeEvent.register()
   EscapeEvent.register()
-  FinishSelectionEvent.register()
   LibraryEvents.register()
-  OpenLibraryEvent.register()
   SettingsEvents.register()
   DockEvent.register()
   PrintEvent.register()
   NotificationEvent.register()
+  SetTitleEvents.register()
+  GlobalEvent.register()
 })
 
 app.on('before-quit', () => {
