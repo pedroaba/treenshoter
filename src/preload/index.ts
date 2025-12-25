@@ -1,4 +1,3 @@
-import { electronAPI, type ElectronAPI } from '@electron-toolkit/preload'
 import { contextBridge, ipcRenderer } from 'electron'
 import { LibraryIPC } from '../shared/communication/ipc/library'
 import {
@@ -20,11 +19,15 @@ type NotifyParams = {
 export type TreenshoterAPI = {
   global: {
     notify: (params: NotifyParams) => Promise<void>
+    setTitle: (title: string) => void
+    readyToTakePrint: (mode: PrintScreenMode) => void
   }
   settings: {
     fetchSpecific: (
       params: SettingsIPCGetConfigsRequest,
     ) => Promise<SettingsIPCGetConfigsResponse>
+    selectFolder: () => Promise<{ directory: string } | null>
+    setNewSettings: (settings: { default_save_directory: string }) => void
   }
   library: {
     getLibrary: () => Promise<Screenshot[]>
@@ -68,7 +71,6 @@ export type TreenshoterAPI = {
 
 declare global {
   export interface Window {
-    electron: ElectronAPI
     api: TreenshoterAPI
   }
 }
@@ -78,10 +80,26 @@ const api = {
     notify: async (params: NotifyParams) => {
       return await ipcRenderer.invoke(GlobalsIPC.NOTIFY, params)
     },
+    setTitle: (title: string) => {
+      return ipcRenderer.send(GlobalsIPC.SET_TITLE, {
+        title,
+      })
+    },
+    readyToTakePrint: (mode: PrintScreenMode) => {
+      return ipcRenderer.send(GlobalsIPC.READY_TO_TAKE_PRINT, {
+        mode,
+      })
+    },
   },
   settings: {
     fetchSpecific: async (params) => {
       return await ipcRenderer.invoke(SettingsIPC.GET_CONFIGS, params)
+    },
+    selectFolder: async () => {
+      return await ipcRenderer.invoke(SettingsIPC.SELECT_FOLDER)
+    },
+    setNewSettings: (settings: { default_save_directory: string }) => {
+      return ipcRenderer.send(SettingsIPC.SET, settings)
     },
   },
   library: {
@@ -170,12 +188,10 @@ const api = {
 
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
   }
 } else {
-  window.electron = electronAPI
   window.api = api
 }

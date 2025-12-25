@@ -1,10 +1,14 @@
-import { app, Menu, nativeImage, Tray } from 'electron'
+import {
+  app,
+  Menu,
+  nativeImage,
+  Tray,
+  type MenuItemConstructorOptions,
+} from 'electron'
 import { settings } from '../constants/settings'
-import { QuitState } from '../states/quit'
 import { GetTrayIconSize } from '../utils/get-tray-icon-size'
 import { createLibraryScreen, createSettingsWindow } from './create-window'
-// import { LibraryWindow } from './library'
-// import { SettingsWindow } from './settings'
+import { platform } from '@electron-toolkit/utils'
 
 export class TrayWindow {
   private static _instance: Tray | null = null
@@ -27,30 +31,38 @@ export class TrayWindow {
     TrayWindow._instance = new Tray(icon)
     TrayWindow._instance.setToolTip(settings.ELECTRON_APP_NAME)
 
-    const menu = Menu.buildFromTemplate([
+    const globalMenu: MenuItemConstructorOptions[] = [
       {
-        label: 'Library',
+        label: '📚 Library',
         click: () => {
           createLibraryScreen()
         },
       },
       {
-        label: 'Settings',
+        label: '⚙️ Settings',
         click: () => {
           createSettingsWindow()
         },
       },
+    ]
+
+    const menu = Menu.buildFromTemplate([
+      { label: 'Treenshoter 📸', type: 'header' },
+      ...globalMenu,
+      { type: 'separator' },
+      { role: 'about', label: 'About Treenshoter' },
       { type: 'separator' },
       {
-        label: 'Quit',
-        click: () => {
-          QuitState.state = true
-          app.quit()
-        },
+        label: 'Quit Treenshoter?',
+        role: 'quit',
       },
     ])
 
     TrayWindow._instance.setContextMenu(menu)
+    if (platform.isMacOS) {
+      app.dock?.setMenu(Menu.buildFromTemplate(globalMenu))
+    }
+
     return TrayWindow._instance
   }
 }

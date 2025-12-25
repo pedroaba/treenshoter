@@ -7,4 +7,5 @@ export const settings = {
   ELECTRON_APP_NAME: 'Screenshoter',
   ELECTRON_APP_VERSION: '1.0.0',
   ELECTRON_APP_AUTHOR: 'pedroaba <pedr.augustobarbosa.aparecido@gmail.com>',
+  ELECTRON_APP_WEBSITE: 'https://treenshoter-website.vercel.app',
 }

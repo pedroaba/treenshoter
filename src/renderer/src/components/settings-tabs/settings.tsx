@@ -1,7 +1,6 @@
 import { cn } from '../../lib/cn'
 import { Folder } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { SettingsIPC } from '../../../../shared/communication/ipc/settings'
 import { Button } from '../button'
 
 export function SettingsTabs() {
@@ -9,9 +8,7 @@ export function SettingsTabs() {
   const [folder, setFolder] = useState<string>('')
 
   async function handleOpenSelectFolder() {
-    const result = await window.electron.ipcRenderer.invoke(
-      SettingsIPC.SELECT_FOLDER,
-    )
+    const result = await window.api.settings.selectFolder()
 
     if (result) {
       setFolder(result.directory)
@@ -19,19 +16,16 @@ export function SettingsTabs() {
   }
 
   function handleSaveNewConfiguration() {
-    window.electron.ipcRenderer.send(SettingsIPC.SET, {
+    window.api.settings.setNewSettings({
       default_save_directory: folder,
     })
   }
 
   useEffect(() => {
     async function fetchFolder() {
-      const response = await window.electron.ipcRenderer.invoke(
-        SettingsIPC.GET_CONFIGS,
-        {
-          settingsToFetch: ['default_save_directory'],
-        },
-      )
+      const response = await window.api.settings.fetchSpecific({
+        settingsToFetch: ['default_save_directory'],
+      })
 
       setFolder(response.default_save_directory)
     }

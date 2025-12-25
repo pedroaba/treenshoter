@@ -2,7 +2,6 @@ import { Separator } from '../components/ui/separator'
 import { DockButton } from '../components/dock/button'
 import { BookOpen, Fullscreen, ScanEye, Settings } from 'lucide-react'
 import { useEffect, useState, useTransition } from 'react'
-import { GlobalsIPC } from '../../../shared/communication/ipc/globals'
 import { PrintScreenMode } from '../../../shared/enum/print-screen-mode'
 
 export function Dock() {
@@ -32,9 +31,7 @@ export function Dock() {
   }
 
   function dispatchReadyToTakePrint(mode: PrintScreenMode) {
-    window.electron.ipcRenderer.send(GlobalsIPC.READY_TO_TAKE_PRINT, {
-      mode,
-    })
+    window.api.global.readyToTakePrint(mode)
   }
 
   useEffect(() => {

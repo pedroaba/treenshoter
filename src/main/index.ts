@@ -18,6 +18,15 @@ import { DockEvent } from './events/dock'
 import { PrintEvent } from './events/print'
 import { NotificationEvent } from './events/notification'
 
+app.setAboutPanelOptions({
+  applicationName: settings.ELECTRON_APP_NAME,
+  applicationVersion: settings.ELECTRON_APP_VERSION,
+  version: settings.ELECTRON_APP_VERSION,
+  copyright: settings.ELECTRON_APP_AUTHOR,
+  website: settings.ELECTRON_APP_WEBSITE,
+  iconPath: settings.ELECTRON_APP_ICON,
+})
+
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.pedroaba.screenshoter')
   BootstrapDatabase.bootstrap()
@@ -66,4 +75,6 @@ app.on('before-quit', () => {
   })
 })
 
-app.on('window-all-closed', () => {})
+app.on('window-all-closed', function () {
+  // DO NOTHING
+})
