@@ -1,5 +1,6 @@
 import path from 'node:path'
-import { BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron'
+import { platform } from '@electron-toolkit/utils'
 
 import { registerRoute } from '../../../routers'
 
@@ -19,6 +20,7 @@ export function createWindow(
     show: false,
     resizable: true,
     alwaysOnTop: true,
+    ...options,
 
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
@@ -27,8 +29,6 @@ export function createWindow(
       sandbox: false,
       ...webPreferences,
     },
-
-    ...options,
   })
 
   registerRoute({
@@ -46,8 +46,13 @@ export function createWindow(
 }
 
 export function createLibraryScreen() {
+  if (platform.isMacOS) {
+    app.dock?.show()
+  }
+
   const mainWindow = createWindow({
     id: 'library',
+    alwaysOnTop: false,
   })
 
   mainWindow.on('closed', () => {
@@ -58,8 +63,13 @@ export function createLibraryScreen() {
 }
 
 export function createSettingsWindow() {
+  if (platform.isMacOS) {
+    app.dock?.show()
+  }
+
   const settingsWindow = createWindow({
     id: 'settings',
+    alwaysOnTop: false,
   })
 
   settingsWindow.on('closed', () => {
@@ -67,4 +77,27 @@ export function createSettingsWindow() {
       browserWindow.close()
     })
   })
+}
+
+export function createPreviewWindow() {
+  if (platform.isMacOS) {
+    app.dock?.show()
+  }
+
+  createWindow(
+    {
+      id: 'preview',
+      width: 1000,
+      height: 800,
+      minWidth: 800,
+      minHeight: 600,
+      show: false,
+      autoHideMenuBar: true,
+      backgroundColor: '#09090b',
+      alwaysOnTop: false,
+    },
+    {
+      webSecurity: false,
+    },
+  )
 }

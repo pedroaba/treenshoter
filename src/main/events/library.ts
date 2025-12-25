@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import { clipboard, dialog, ipcMain, nativeImage, shell } from 'electron'
+import { app, clipboard, dialog, ipcMain, nativeImage, shell } from 'electron'
+import { platform } from '@electron-toolkit/utils'
 import sqlBricks from 'sql-bricks'
 import { DatabaseManager } from '../database/manager'
 import { NotificationDispatcher } from '../utils/dispatch-simple-notifications'
@@ -54,6 +55,10 @@ export class LibraryEvents {
 
     ipcMain.on(LibraryIPC.OPEN_DETAIL, (_, id: number) => {
       DetailState.setImageId(id)
+
+      if (platform.isMacOS) {
+        app.dock?.show()
+      }
 
       createWindow(
         {
