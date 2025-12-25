@@ -13,8 +13,6 @@ export class DatabaseManager {
     const appDataPath = app.getPath('userData')
     const databasePath = path.join(appDataPath, 'database.db')
 
-    console.log(appDataPath)
-
     const db = new DatabaseSync(databasePath)
     db.exec('PRAGMA journal_mode = WAL;')
 

@@ -174,16 +174,15 @@ const api = {
     },
   },
   state: {
+    // TODO: add a way to remove the event listener
     onReadyToTakePrint: (callback: (mode: PrintScreenMode) => void) => {
       return ipcRenderer.on(GlobalsIPC.READY_TO_TAKE_PRINT, (_, data) => {
-        console.log('onReadyToTakePrint', data)
         callback(data.mode as PrintScreenMode)
       })
     },
+    // TODO: add a way to remove the event listener
     onModeChanged: (callback: (mode: PrintScreenMode) => void) => {
       return ipcRenderer.on(GlobalsIPC.MODE_CHANGED, (_, data) => {
-        console.log('onModeChanged', data)
-
         callback(data.mode as PrintScreenMode)
       })
     },
