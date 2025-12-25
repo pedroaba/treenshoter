@@ -4,6 +4,8 @@ import { shortcuts } from '../constants/shortcuts'
 import { GetScreensUtil } from '../utils/get-screens'
 import { OverlayState } from '../states/overlay'
 import { createWindow } from '../ui/create-window'
+import { GlobalsIPC } from '../../shared/communication/ipc/globals'
+import { PrintscreenModeState } from '../states/mode'
 
 export class PrintShortcut {
   static register() {
@@ -37,6 +39,12 @@ export class PrintShortcut {
         overlay.setAlwaysOnTop(true, 'floating')
 
         OverlayState.add(overlay)
+
+        setTimeout(() => {
+          overlay.webContents.send(GlobalsIPC.READY_TO_TAKE_PRINT, {
+            mode: PrintscreenModeState.get(),
+          })
+        }, 500)
       })
 
       const primaryDisplay = GetScreensUtil.getScreenByCursor()
