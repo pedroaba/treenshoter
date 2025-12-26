@@ -1,6 +1,6 @@
 {
   "name": "treenshoter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimalist Electron app to quickly capture, manage, and organize your screenshots. Features include instant screen capture, region selection, clipboard copy, custom save paths, screenshot library with preview and delete, and seamless cross-platform support. Ideal for productivity and quick documentation.",
   "main": "./out/main/index.js",
   "author": "example.com",
