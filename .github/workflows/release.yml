@@ -89,8 +89,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Update release links
-        run: pnpm tsx .github/scripts/links.ts
+      - name: Push files to Firebase
+        run: pnpm tsx .github/scripts/push-files-to-firebase.ts
         env:
           GITHUB_REF_NAME: ${{ github.ref_name }}
           GITHUB_SHA: ${{ github.sha }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}

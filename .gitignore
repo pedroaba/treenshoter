@@ -4,3 +4,9 @@ out
 .DS_Store
 .eslintcache
 *.log*
+
+.env
+.env.*
+
+treenshoter-firebase-adminsdk-fbsvc-54a3e97fce.json
+t
