@@ -254,7 +254,14 @@ async function main() {
   console.log('='.repeat(60))
 
   Logger.step(`Adding files to Firestore...`)
+
+  const versionIndex = secrets.GITHUB_REF_NAME.replace('v', '').replace('.', '')
   const releaseDoc = releasesCollection.doc(secrets.GITHUB_REF_NAME)
+
+  await releaseDoc.set({
+    versionIndex: versionIndex,
+    uploadedAt: Timestamp.now(),
+  })
 
   for (const file of processedFiles) {
     Logger.step(`Adding file to Firestore: ${file.os}/${file.filename}...`)
